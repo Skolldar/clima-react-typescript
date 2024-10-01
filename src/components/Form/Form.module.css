@@ -8,16 +8,15 @@
 .form input[type="text"],
 .form select {
     padding: 1rem;
-    background-color: transparent;
+    background-color: var(--white);
     border: .3rem solid var(--white);
     font-size: 1.8rem;
     font-weight: 400;
     border-radius: 2rem;
-    color: var(--white)
 }
 
 .field ::placeholder {
-    color: var(--white);
+    color: var(--blue);
 }
 
 .submit {
