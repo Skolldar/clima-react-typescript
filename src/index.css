@@ -1,6 +1,7 @@
 :root {
   --white: #FFF;
   --primary: #F59E0B;
+  --blue: #093949;
 }
 
 html {
@@ -14,5 +15,4 @@ body {
   background-repeat: no-repeat;
   color: var(--white);
   font-size: 2rem;
-  height: 100vh;
 }
