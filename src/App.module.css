@@ -1,5 +1,22 @@
 .tittle {
     text-align: center;
-    font-size: 3rem;
+    font-size: 6rem;
     margin-top: 5rem;
+    padding-top: 5rem;
+}
+
+.container {    
+    width:100%;
+    max-width: 100rem;
+    margin: 0 auto;
+}
+
+@media (min-width:798px) {
+    .container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        align-items: center;
+        gap: 10rem;
+        margin-top: 5rem;
+    }
 }
