@@ -9,10 +9,10 @@ html {
 }
 
 body {
-  font-family: "DM Serif Text", serif;
-  background-image: url('/montain-blue.jpg');
-  background-size: cover;
+  font-family: "PT Serif", serif;
+  background-image: url('./public/montain-blue.jpg');
   background-repeat: no-repeat;
+  background-size: cover;
   color: var(--white);
   font-size: 2rem;
 }
