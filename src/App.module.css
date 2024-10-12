@@ -1,13 +1,13 @@
 .tittle {
     text-align: center;
     font-size: 6rem;
-    margin-top: 5rem;
-    padding-top: 5rem;
+    margin: 2rem 0;
+    padding: 1.2rem 0;
 }
 
 .container {    
     width:100%;
-    max-width: 100rem;
+    max-width: 120rem;
     margin: 0 auto;
 }
 
@@ -16,7 +16,22 @@
         display: grid;
         grid-template-columns: repeat(2, 1fr);
         align-items: center;
+        gap: 5rem;
+        margin-top: 5rem;
+    }
+    .tittle {
+        font-size: 6rem;
+        margin-top: 5rem;
+        padding-top: 5rem;
+    }
+}
+
+@media (min-width:1280px) {
+    .container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        align-items: center;
         gap: 10rem;
-        margin-top: 10rem;
+        margin-top: 8rem;
     }
 }
