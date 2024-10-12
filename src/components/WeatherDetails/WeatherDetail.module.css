@@ -1,0 +1,55 @@
+.container {
+    color: var(--white);
+    border-radius: 1rem;
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(5px);
+    padding: 1.2rem 0.5rem;
+}
+
+.current {
+    font-size: 6rem;
+    font-weight: 900;
+    margin: 1rem;
+}
+
+.description {
+    margin-bottom: 1rem;
+}
+
+.temperatures {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+.sunny {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+}
+
+.temperatures p,
+.sunny p {
+    font-size: 1.5rem;    
+    font-weight: 900;
+}
+
+.temperatures span,
+.sunny span {
+    font-weight:400; 
+}
+
+@media (min-width:798px) {
+    .container {
+        padding: 1.2rem 2.2rem;
+        margin-top: 1rem;
+    }
+
+    .temperatures{
+        gap: 2rem;
+    }
+    .temperatures p, 
+    .sunny p {
+        font-size: 1.8rem;
+    }
+}
