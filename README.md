@@ -1,6 +1,7 @@
 # Weather App 🌦️
 
 A responsive weather application built with TypeScript, JavaScript, HTML, and CSS, connected to the OpenWeatherMap API and using Valibot for data validation.
+[![weaether-app.png](https://i.postimg.cc/SKsJTMqs/weaether-app.png)](https://postimg.cc/xXwfqqXD)
 
 ## Features ✨
 
