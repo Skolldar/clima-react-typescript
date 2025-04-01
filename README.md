@@ -1,50 +1,91 @@
-# React + TypeScript + Vite
+# Weather App 🌦️
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A responsive weather application built with TypeScript, JavaScript, HTML, and CSS, connected to the OpenWeatherMap API and using Valibot for data validation.
 
-Currently, two official plugins are available:
+## Features ✨
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Real-time weather data** for cities worldwide  
+- **Available in 20 countries** (see full list below)
+- **Multiple weather metrics** including:
+  - Current temperature
+  - Feels-like temperature
+  - Humidity
+  - Wind speed
+  - Sunrise/sunset times
+- **Type-safe** implementation with TypeScript
+- **Data validation** using Valibot
+- **Responsive design** works on all devices
+- **Error handling** for invalid city/country inputs
 
-## Expanding the ESLint configuration
+## Available Countries 🌍
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+The app supports weather data for these countries (and their cities):
 
-- Configure the top-level `parserOptions` property like this:
+| Code | Country         | Code | Country          |
+|------|-----------------|------|------------------|
+| US   | United States   | BR   | Brazil           |
+| MX   | México          | FR   | France           |
+| AR   | Argentina       | DE   | Germany          |
+| CO   | Colombia        | IT   | Italy            |
+| CR   | Costa Rica      | JP   | Japan            |
+| ES   | España          | IN   | India            |
+| PE   | Perú            | CA   | Canada           |
+| GB   | United Kingdom  | AU   | Australia        |
+| CN   | China           | ZA   | South Africa     |
+| RU   | Russia          | NG   | Nigeria          |
+| KR   | South Korea     | EG   | Egypt            |
+| ID   | Indonesia       | PK   | Pakistan         |
+| TR   | Turkey          | BD   | Bangladesh       |
+| NL   | Netherlands     | PH   | Philippines      |
+| SA   | Saudi Arabia    | VN   | Vietnam          |
+| CH   | Switzerland     | ET   | Ethiopia         |
+| SE   | Sweden          | IR   | Iran             |
+| PL   | Poland          | TH   | Thailand         |
+| BE   | Belgium         | CD   | Congo            |
+| GR   | Greece          | UA   | Ukraine          |
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+## Technologies Used 🛠️
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+- **Frontend**:
+  - TypeScript
+  - JavaScript
+  - HTML5
+  - CSS3
+  - React
+  
+- **Libraries**:
+  - Axios (for API calls)
+  - Valibot (for data validation)
+  
+- **API**:
+  - OpenWeatherMap API
+    
+## Installation & Setup 💻
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+    ```bash
+      git clone https://github.com/yourusername/weather-app.git
+    ```
+      cd weather-app
+    ```
+      npm install
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+## How to Contribute 🤝
+
+We welcome contributions! Here's how:
+
+1. **Report Bugs**  
+   Open an [issue](https://github.com/yourusername/weather-app/issues) with:
+   - Steps to reproduce
+   - Expected vs actual behavior
+   - Screenshots if applicable
+
+2. **Suggest Features**  
+   Propose new ideas via:
+   - 🌟 [Feature Requests](https://github.com/yourusername/weather-app/discussions)
+   - 💡 Pull Requests
+
+3. **Add New Countries**  
+   To expand coverage:
+   ```typescript
+   // In src/data/countries.ts
+   { code: 'NZ', name: 'New Zealand' } // Example addition
