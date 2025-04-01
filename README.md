@@ -81,7 +81,6 @@ We welcome contributions! Here's how:
 
 2. **Suggest Features**  
    Propose new ideas via:
-   - 🌟 [Feature Requests](https://github.com/yourusername/weather-app/discussions)
    - 💡 Pull Requests
 
 3. **Add New Countries**  
