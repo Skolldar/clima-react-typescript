@@ -22,28 +22,28 @@ A responsive weather application built with TypeScript, JavaScript, HTML, and CS
 
 The app supports weather data for these countries (and their cities):
 
-| Code | Country         | Code | Country          |
-|------|-----------------|------|------------------|
-| US   | United States   | BR   | Brazil           |
-| MX   | México          | FR   | France           |
-| AR   | Argentina       | DE   | Germany          |
-| CO   | Colombia        | IT   | Italy            |
-| CR   | Costa Rica      | JP   | Japan            |
-| ES   | España          | IN   | India            |
-| PE   | Perú            | CA   | Canada           |
-| GB   | United Kingdom  | AU   | Australia        |
-| CN   | China           | ZA   | South Africa     |
-| RU   | Russia          | NG   | Nigeria          |
-| KR   | South Korea     | EG   | Egypt            |
-| ID   | Indonesia       | PK   | Pakistan         |
-| TR   | Turkey          | BD   | Bangladesh       |
-| NL   | Netherlands     | PH   | Philippines      |
-| SA   | Saudi Arabia    | VN   | Vietnam          |
-| CH   | Switzerland     | ET   | Ethiopia         |
-| SE   | Sweden          | IR   | Iran             |
-| PL   | Poland          | TH   | Thailand         |
-| BE   | Belgium         | CD   | Congo            |
-| GR   | Greece          | UA   | Ukraine          |
+| Code | Country            |
+|------|--------------------|
+| US   | United States      |
+| GB   | United Kingdom     |
+| CA   | Canada             |
+| AU   | Australia          |
+| DE   | Germany            |
+| FR   | France             |
+| IT   | Italy              |
+| ES   | Spain              |
+| JP   | Japan              |
+| CN   | China              |
+| IN   | India              |
+| BR   | Brazil             |
+| MX   | Mexico             |
+| ZA   | South Africa       |
+| AE   | United Arab Emirates |
+| SG   | Singapore          |
+| KR   | South Korea        |
+| RU   | Russia             |
+| TR   | Turkey             |
+| SA   | Saudi Arabia       |
 
 ## Technologies Used 🛠️
 
