@@ -10,7 +10,7 @@ html {
 
 body {
   font-family: "PT Serif", serif;
-  background-image: url('./public/montain-blue.jpg');
+  background-image: url('./bg_clima.jpg');
   background-repeat: no-repeat;
   background-size: cover;
   color: var(--white);
