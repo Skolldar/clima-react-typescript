@@ -10,7 +10,7 @@ html {
 
 body {
   font-family: "PT Serif", serif;
-  background-image: url('./montain-blue.jpg');
+  background-image: url('/montain-blue.jpg');
   background-repeat: no-repeat;
   background-size: cover;
   color: var(--white);
