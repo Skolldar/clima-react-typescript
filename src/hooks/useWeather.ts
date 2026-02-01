@@ -2,6 +2,7 @@ import axios from 'axios'; //es una abstraccion sobre FETCH API, simplifica un p
 //import { z } from 'zod'; //libreria de validador de datos
 import {object, array, string, number, InferOutput, parse} from 'valibot'
 import { SearchType } from '../types/types-index';
+import { countries } from '../data/countries'
 import { useMemo, useState } from 'react';
 
 
@@ -18,11 +19,13 @@ const WeatherSchema = object({
     temp_min: number(),
   }),
   wind: object({
-    speed: number()
+    speed: number(),
+    deg: number()
   }),
   sys: object({
     sunrise: number(),
-    sunset: number()
+    sunset: number(),
+    country: string()
   }),
   weather: array(
     object({
@@ -30,6 +33,24 @@ const WeatherSchema = object({
     })
   )
 })
+
+const HourlyWeatherSchema = object({
+  dt: number(),
+  main: object({
+    temp: number(),
+  }),
+  weather: array(
+    object({
+      description: string()
+    })
+  ),
+  wind: object({
+    speed: number()
+  }),
+  pop: number()
+})
+
+export type HourlyWeather = InferOutput<typeof HourlyWeatherSchema>
 
 
 //exportamos el type para usarlo en el WeatherDetail
@@ -51,13 +72,18 @@ const initialState = {
     }
   ],
   wind: {
-    speed: 0
+    speed: 0,
+    deg: 0
   },
   sys:{
     sunrise: 0,
     sunset: 0
+    ,
+    country: ''
   },
  }
+
+const initialHourlyState: HourlyWeather[] = []
 
 
 export default function useWeather() {
@@ -66,6 +92,7 @@ export default function useWeather() {
   const [loading, setLoading] = useState(false)
   const [notFound, setNotFound] = useState(false)
   const [weather, setWeather] = useState<Weather>(initialState)
+  const [hourlyWeather, setHourlyWeather] = useState<HourlyWeather[]>(initialHourlyState)
 
     //Asincrona para hacer el llamado de la API (bloquea el codigo hasta que tengamos una respuesta)
     const fetchWeather = async (search: SearchType) => {
@@ -73,21 +100,20 @@ export default function useWeather() {
         const appId = import.meta.env.VITE_API_KEY
 
         //spining loading activado no mostrara el resultaado ni la alerta de la ciudad no encontrada
-        setLoading(true);
+        setTimeout(() => setLoading(true), 6000);
+        
         setWeather(initialState);
+        setHourlyWeather(initialHourlyState);
         setNotFound(false);
 
         //try catch permite que al tener un error puedas debuguear
         try {
             const geoUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${search.city},${search.country}&appid=${appId}`
+          console.log(geoUrl)
 
-            //consultar datos:
-            //el default es method: get
-            //{data} en destructuring para ingresar directamente a data.
             const {data} = await axios(geoUrl)
-            // console.log(data)
+            console.log(data)
 
-            //Comprobar si el clima existe:
             if(!data[0]) {
               setNotFound(true);
               setTimeout(() => {
@@ -98,20 +124,37 @@ export default function useWeather() {
             //Latitud y longitud:
             const lat = data[0].lat
             const lon = data[0].lon
+            const geoCountryCode = data[0].country
             
             const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${appId}`
+            const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${appId}`
 
-            //Hacer el llamado de la url de lat y lon... hay que renombrar el data con ":"!!  
-            //Castear el type:
-            //Type Guards:
-            //VALIBOT
-            const  {data: weatherResult} = await axios(weatherUrl)
+            const [weatherResponse, forecastResponse] = await Promise.all([
+              axios(weatherUrl),
+              axios(forecastUrl)
+            ])
 
-            const result =  parse(WeatherSchema, weatherResult)
+            const weatherResult = parse(WeatherSchema, weatherResponse.data)
+            console.log(weatherResult)
 
-            if(result){
-              setWeather(result)
-              console.log(result)
+            // Parse hourly forecast data - get next 7 readings (roughly 24 hours)
+            const forecastData = forecastResponse.data.list || []
+            const hourlyData = forecastData.slice(0, 7).map((item: void) => 
+              parse(HourlyWeatherSchema, item)
+            )
+            console.log(hourlyData)
+
+            if(weatherResult){
+              const countryName = countries.find(c => c.code === geoCountryCode)?.name ?? weatherResult.sys.country
+              setWeather({
+                ...weatherResult,
+                sys: {
+                  ...weatherResult.sys,
+                  country: countryName
+                }
+              })
+              setHourlyWeather(hourlyData)
+              console.log(weatherResult)
             }
 
         } catch (error) {
@@ -126,6 +169,7 @@ export default function useWeather() {
 
   return {
     weather,
+    hourlyWeather,
     loading,
     notFound,
     fetchWeather,

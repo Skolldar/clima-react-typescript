@@ -10,13 +10,11 @@ type FromProps = {
 
 export default function Form({fetchWeather}: FromProps) {
 
-//////Countries state:///////////
     const [search, setSearch] = useState<SearchType>({
         city: '',
         country: ''
     })
 
-/////////// ALERTTTTT//////////////////
     const [alert, setAlert] = useState('')
 
     const handleChange = (e:ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>) => {
@@ -26,9 +24,6 @@ export default function Form({fetchWeather}: FromProps) {
         })
     }
 
-
-
-//VALIDATION SUBMIT/////////////
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
 

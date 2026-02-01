@@ -1,25 +1,19 @@
-import styles from "./App.module.css"
-import Form from "./components/Form/Form"
-import Spinner from "./components/Spinner/Spinner"
 import WeatherDetail from "./components/WeatherDetails/WeatherDetail"
 import useWeather from "./hooks/useWeather"
 import Alert from "./components/Alert/Alert"
+import Header from "./components/Dashboard/Header"
 
 const App = () => {
 
-  const  {weather, loading, notFound, fetchWeather, hasWeatherData} = useWeather()
+  const  {weather, hourlyWeather, notFound, fetchWeather, hasWeatherData} = useWeather()
 
   return (
     <>
-    <h1 className={styles.tittle}>Weather Search</h1>
-
-    <div className={styles.container}>
-      <Form fetchWeather={fetchWeather}/>
-      {loading && <Spinner/>}
-      {hasWeatherData && <WeatherDetail weather={weather}/>}
-      {notFound && <Alert>City not found</Alert>}
-
-    </div>
+    <main className="p-4 md:p-10 lg:p-20 space-y-2">
+    <Header fetchWeather={fetchWeather} />
+      {hasWeatherData && <WeatherDetail weather={weather} hourlyWeather={hourlyWeather}/>}
+        {notFound && <Alert>City not found</Alert>}
+    </main>
     </>
   )
 }

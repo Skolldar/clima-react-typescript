@@ -1,0 +1,155 @@
+import { FaSearch } from "react-icons/fa";
+import { useEffect, useRef, useState } from "react";
+import type { SearchType } from "../../types/types-index";
+import { countries } from "../../data/countries";
+import Alert from "../Alert/Alert";
+
+type HeaderProps = {
+  fetchWeather: (search: SearchType) => Promise<void>
+}
+
+type GeoItem = {
+  name: string;
+  state?: string;
+  country: string; // country code
+}
+
+const Header = ({ fetchWeather }: HeaderProps) => {
+    const [query, setQuery] = useState("");
+    const [suggestions, setSuggestions] = useState<GeoItem[]>([]);
+    const [open, setOpen] = useState(false);
+    const skipFetchRef = useRef<boolean>(false);
+    const timerRef = useRef<number | null>(null);
+    const containerRef = useRef<HTMLDivElement | null>(null);
+    const [error, setError] = useState("");
+
+  useEffect(() => {
+    const onClick = (e: MouseEvent) => {
+      if (!containerRef.current) return;
+      if (!containerRef.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener("click", onClick);
+    return () => document.removeEventListener("click", onClick);
+  }, []);
+
+  useEffect(() => {
+    if (skipFetchRef.current) {
+      skipFetchRef.current = false;
+      return;
+    }
+
+    if (!query) {
+      setSuggestions([]);
+      setOpen(false);
+      return;
+    }
+
+    if (timerRef.current) window.clearTimeout(timerRef.current);
+    
+    timerRef.current = window.setTimeout(async () => {
+      const appId = import.meta.env.VITE_API_KEY;
+      try {
+        const url = `https://api.openweathermap.org/geo/1.0/direct?q=${encodeURIComponent(
+          query
+        )}&limit=5&appid=${appId}`;
+        const res = await fetch(url);
+        const data = await res.json();
+        if (Array.isArray(data)) {
+          const items: GeoItem[] = data.map((d) => ({
+            name: d.name,
+            state: d.state,
+            country: d.country
+          }));
+          setSuggestions(items);
+          setOpen(items.length > 0);
+        } else {
+          setSuggestions([]);
+          setOpen(false);
+        }
+      } catch (err: unknown) {
+        console.error(err);
+        setError("Failed to fetch location suggestions.");
+        setSuggestions([]);
+        setOpen(false);
+      }
+    }, 300);
+
+    return () => {
+      if (timerRef.current) window.clearTimeout(timerRef.current);
+    };
+  }, [query]);
+
+  const handleSelect = (item: GeoItem) => {
+    fetchWeather({ city: item.name, country: item.country });
+    const countryName = countries.find(c => c.code === item.country)?.name ?? item.country;
+    skipFetchRef.current = true;
+    setQuery(`${item.name}${item.state ? `, ${item.state}` : ""}, ${countryName}`);
+    setOpen(false);
+  };
+
+  const handleSearch = () => {
+    if (!query) return;
+    const parts = query.split(",").map(p => p.trim()).filter(Boolean);
+    const city = parts[0];
+    let countryCode = "";
+    if (parts.length > 1) {
+      const last = parts[parts.length - 1];
+      const matched = countries.find(c => c.name.toLowerCase() === last.toLowerCase() || c.code.toLowerCase() === last.toLowerCase());
+      if (matched) countryCode = matched.code;
+    }
+    fetchWeather({ city, country: countryCode });
+    setOpen(false);
+  };
+
+  return (
+    <div>
+      <header className="grid grid-cols-2 items-start lg:gap-10 gap-5">
+              {error && <Alert>{error}</Alert>}
+        <div className="relative" ref={containerRef}>
+          <div className="flex items-center relative">
+            <input
+              className="w-full px-4 py-2 rounded-lg border border-slate-300 bg-slate-50 text-primary"
+              placeholder="Search city (e.g. Madrid, Spain)"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              onFocus={() => { if (suggestions.length) setOpen(true); }}
+            />
+            <button
+              className="absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-lg cursor-pointer"
+              onClick={handleSearch}
+              aria-label="Search"
+            >
+              <FaSearch size={20} />
+            </button>
+          </div>
+
+          {open && suggestions.length > 0 && (
+            <ul className="absolute z-20 mt-2 w-full bg-white border border-slate-200 rounded-lg shadow-md max-h-60 overflow-auto">
+              {suggestions.map((s, idx) => {
+                const countryName = countries.find(c => c.code === s.country)?.name ?? s.country;
+                const label = `${s.name}${s.state ? `, ${s.state}` : ""}, ${countryName}`;
+                return (
+                  <li
+                    key={`${s.name}-${s.country}-${idx}`}
+                    className="px-3 py-2 hover:bg-slate-100 cursor-pointer text-xl text-primary"
+                    onClick={() => handleSelect(s)}
+                  >
+                    {label}
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+        </div>
+
+        <div className="blur-card">
+          <h1 className="font-bold text-primary">Dashboard</h1>
+        </div>
+      </header>
+    </div>
+  );
+};
+
+export default Header;
