@@ -37,9 +37,9 @@ const App = () => {
       <div className="ml-2 md:ml-0">
         <Bar isDarkMode={isDarkMode} toggleTheme={toggleTheme} />
       </div>
-      <div className="flex-1 lg:px-8 px-2 space-y-6">
+      <div className="flex-1 lg:px-8 px-2 space-y-8 mt-2">
         <Header fetchWeather={fetchWeather} />
-        <div className="mt-10">
+        <div className="mt-20">
         {loading && <div className="flex justify-center items-center relative mt-25"><Spinner /></div>}
         {!loading && hasWeatherData && <WeatherDetail weather={weather} hourlyWeather={hourlyWeather} uvIndex={uvIndex} />}
         {notFound && <Alert>City not found</Alert>}
