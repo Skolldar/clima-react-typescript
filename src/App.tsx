@@ -34,7 +34,7 @@ const App = () => {
   return (
     <>
     <main className={`${isDarkMode ? 'dark-bg' : 'light-bg'} p-10 flex min-h-screen`}>
-      <div className="w-80">
+      <div>
         <Bar isDarkMode={isDarkMode} toggleTheme={toggleTheme} />
       </div>
       <div className="flex-1 m-5 px-8 space-y-10">
