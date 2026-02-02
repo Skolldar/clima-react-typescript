@@ -99,8 +99,7 @@ export default function useWeather() {
         
         const appId = import.meta.env.VITE_API_KEY
 
-        //spining loading activado no mostrara el resultaado ni la alerta de la ciudad no encontrada
-        setTimeout(() => setLoading(true), 6000);
+        setLoading(true);
         
         setWeather(initialState);
         setHourlyWeather(initialHourlyState);
@@ -164,6 +163,67 @@ export default function useWeather() {
         }
     }
 
+    const fetchWeatherByLocation = async () => {
+        const appId = import.meta.env.VITE_API_KEY
+
+        setLoading(true);
+        setWeather(initialState);
+        setHourlyWeather(initialHourlyState);
+        setNotFound(false);
+
+        if (!navigator.geolocation) {
+            setNotFound(true);
+            setTimeout(() => setNotFound(false), 2000);
+            setLoading(false);
+            return;
+        }
+
+        navigator.geolocation.getCurrentPosition(
+            async (position) => {
+                const lat = position.coords.latitude;
+                const lon = position.coords.longitude;
+
+                try {
+                    const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${appId}`;
+                    const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${appId}`;
+
+                    const [weatherResponse, forecastResponse] = await Promise.all([
+                        axios(weatherUrl),
+                        axios(forecastUrl)
+                    ]);
+
+                    const weatherResult = parse(WeatherSchema, weatherResponse.data);
+
+                    const forecastData = forecastResponse.data.list || [];
+                    const hourlyData = forecastData.slice(0, 7).map((item: void) => parse(HourlyWeatherSchema, item));
+
+                    const countryName = countries.find(c => c.code === weatherResult.sys.country)?.name ?? weatherResult.sys.country;
+
+                    setWeather({
+                        ...weatherResult,
+                        sys: {
+                            ...weatherResult.sys,
+                            country: countryName
+                        }
+                    });
+                    setHourlyWeather(hourlyData);
+                } catch (error) {
+                    console.log(error);
+                    setNotFound(true);
+                    setTimeout(() => setNotFound(false), 2000);
+                } finally {
+                    setLoading(false);
+                }
+            },
+            (error) => {
+                console.log('Geolocation error:', error);
+                setNotFound(true);
+                setTimeout(() => setNotFound(false), 2000);
+                setLoading(false);
+            }
+        );
+    };
+
     //Verificar si el weather tiene algo mostrara el titulo de WeatherDetail
     const hasWeatherData = useMemo(() => weather.name, [weather])
 
@@ -173,6 +233,7 @@ export default function useWeather() {
     loading,
     notFound,
     fetchWeather,
+    fetchWeatherByLocation,
     hasWeatherData
   }
 }

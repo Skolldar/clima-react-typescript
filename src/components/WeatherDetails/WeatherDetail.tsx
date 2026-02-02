@@ -1,9 +1,10 @@
 import { Weather, HourlyWeather } from "../../hooks/useWeather"
 import { formatTemperature } from "../../utils"
-import { format } from 'date-fns'
 import styles from "./WeatherDetail.module.css"
 import { FaLocationDot } from "react-icons/fa6";
 import { useState } from "react";
+import WeatherHours from "./WeatherHours";
+import WeatherSunTime from "./WeatherSunTime";
 
 
 type WeatherDetailProps = {
@@ -67,7 +68,7 @@ export default function WeatherDetail({weather, hourlyWeather}: WeatherDetailPro
   ];
   return (
     <>
-    <div className="grid lg:grid-cols-2 lg:gap-4 grid-cols-1 space-y-2 lg:space-y-8">
+    <div className="grid lg:grid-cols-2 lg:gap-10 grid-cols-1 space-y-2 lg:space-y-8">
         <div className={`blur-card text-primary ${styles.card}`}>
           <div className="grid grid-cols-2 items-center justify-between py-3">
             <div className="flex items-center justify-start gap-2">
@@ -94,7 +95,7 @@ export default function WeatherDetail({weather, hourlyWeather}: WeatherDetailPro
               <div>
                 <p className={styles.description}>{weather.weather[0].description}</p>
                 <p className={styles.current}>{convertTemp(weather.main.temp)}&deg;{tempUnit}</p>
-              <div className="flex gap-2 items-end justify-center">
+              <div className="flex gap-2 items-center justify-start">
                   <span className="font-bold">Min: </span><span>{convertTemp(weather.main.temp_min)}&deg;{tempUnit}</span>
                   <span className="font-bold">Max: </span><span>{convertTemp(weather.main.temp_max)}&deg;{tempUnit}</span>
                 </div>
@@ -115,7 +116,7 @@ export default function WeatherDetail({weather, hourlyWeather}: WeatherDetailPro
             {infoSections.map(({ label, content, icon }) => (
               <div
                 key={label}
-                className="bg-white mini-card-shadow max-w-3xl mx-auto rounded-2xl lg:p-8 px-4 py-4"
+                className="max-w-3xl mx-auto rounded-2xl lg:p-8 px-4 py-4"
               >
                 <div className="text-gray-800 font-bold text-xl mb-4">{icon} {label}</div>
                 <div className="text-gray-700 text-md font-normal">
@@ -125,78 +126,15 @@ export default function WeatherDetail({weather, hourlyWeather}: WeatherDetailPro
             ))}
           </div>
         </div>
+          <WeatherHours 
+          weather={weather} 
+          hourlyWeather={hourlyWeather} 
+          convertTemp={convertTemp} 
+          tempUnit={tempUnit} />
 
-        <div>
-          <div className={`blur-card text-primary ${styles.card}`}>
-              <h2 className="font-bold text-4xl mb-4">Today</h2>
-              <div className={styles.container}>
-                <div className="mt-4">
-                  <div className="grid grid-cols-7 gap-10 text-center items-center">
-                    {hourlyWeather.length > 0 ? (
-                      hourlyWeather.map((hour) => {
-                          const hourDate = new Date(hour.dt * 1000)
-                          const timeLabel = format(hourDate, 'ha').toLowerCase()
-                          const desc = hour.weather[0]?.description || ''
-                          const icon = getWeatherIcon(desc)
-  
-                          return (
-                            <div key={hour.dt} className="flex flex-col items-center justify-center text-sm space-y-6 rounded-lg">
-                              <div className="text-xs text-gray-500">{timeLabel}</div>
-                              <div className="text-5xl">{icon}</div>
-                              <div className="font-semibold">{convertTemp(hour.main.temp)}&deg;{tempUnit}</div>
-                            </div>
-                          )
-                        })
-                    ) : (
-                      Array.from({ length: 7 }).map((_, i) => {
-                        const hourDate = new Date(Date.now() + i * 60 * 60 * 1000)
-                        const timeLabel = format(hourDate, 'ha').toLowerCase()
-                        const baseTemp = formatTemperature(weather.main.temp)
-                        const temp = baseTemp + (i - 3)
-
-                        const desc = weather.weather[0].description.toLowerCase()
-                        const icon = desc.includes('cloud')
-                          ? '☁️'
-                          : desc.includes('rain') || desc.includes('drizzle')
-                          ? '🌧️'
-                          : desc.includes('snow')
-                          ? '❄️'
-                          : desc.includes('storm') || desc.includes('thunder')
-                          ? '⛈️'
-                          : '☀️'
-
-                        return (
-                          <div key={i} className="flex flex-col items-center justify-center text-sm space-y-6 rounded-lg">
-                            <div className="text-xs text-gray-500">{timeLabel}</div>
-                            <div className="text-5xl">{icon}</div>
-                            <div className="font-semibold">{temp}&deg;{tempUnit}</div>
-                          </div>
-                        )
-                      })
-                    )}
-                  </div>
-                </div>
-            </div>
-          </div>
+          <WeatherSunTime 
+          weather={weather} />
         </div>
-          <div className={`blur-card text-primary ${styles.card}`}>
-          <h2 className="font-bold text-4xl mb-6">Sunset and Sunrise</h2>
-          <div className="grid gap-6 sm:grid-cols-2">
-            <div className="bg-white mini-card-shadow max-w-3xl mx-auto rounded-2xl lg:p-8 px-4 py-4">
-              <div className="text-gray-800 font-bold text-xl mb-4">🌅 Sunrise</div>
-              <div className="text-gray-700 text-md font-normal">
-                <p className="text-2xl font-semibold">{format(new Date(weather.sys.sunrise * 1000), 'h:mm a')}</p>
-              </div>
-            </div>
-            <div className="bg-white mini-card-shadow max-w-3xl mx-auto rounded-2xl lg:p-8 px-4 py-4">
-              <div className="text-gray-800 font-bold text-xl mb-4">🌇 Sunset</div>
-              <div className="text-gray-700 text-md font-normal">
-                <p className="text-2xl font-semibold">{format(new Date(weather.sys.sunset * 1000), 'h:mm a')}</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
     </>
   )
 }

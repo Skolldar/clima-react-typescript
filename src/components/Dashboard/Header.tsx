@@ -143,10 +143,6 @@ const Header = ({ fetchWeather }: HeaderProps) => {
             </ul>
           )}
         </div>
-
-        <div className="blur-card">
-          <h1 className="font-bold text-primary">Dashboard</h1>
-        </div>
       </header>
     </div>
   );
