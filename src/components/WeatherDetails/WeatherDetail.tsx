@@ -83,9 +83,9 @@ export default function WeatherDetail({weather, hourlyWeather}: WeatherDetailPro
                 onChange={(e) => setIsFahrenheit(e.target.checked)}
                 className="sr-only peer" 
               />
-              <div className="group peer ring-0 bg-linear-to-r from-blue-400 to-blue-500 rounded-full outline-none duration-300 after:duration-300 w-24 h-12 shadow-md peer-checked:bg-linear-to-r peer-checked:from-teal-400 peer-checked:to-teal-500 peer-focus:outline-none after:content-[''] after:rounded-full after:absolute after:bg-gray-50 after:outline-none after:h-10 after:w-10 after:top-1 after:left-1 after:flex after:justify-center after:items-center peer-checked:after:translate-x-12 peer-hover:after:scale-95 after:z-10">
-                <span className="absolute top-3 left-3 text-white font-bold text-lg z-0">°C</span>
-                <span className="absolute top-3 right-3 text-white font-bold text-lg z-0">°F</span>
+              <div className="group peer ring-0 bg-linear-to-r from-sky-600 to-sky-700 rounded-full outline-none duration-300 after:duration-300 w-24 h-12 shadow-md peer-checked:bg-linear-to-r peer-checked:from-teal-600 peer-checked:to-teal-500 peer-focus:outline-none after:content-[''] after:rounded-full after:absolute after:bg-gray-50 after:outline-none after:h-10 after:w-10 after:top-1 after:left-1 after:flex after:justify-center after:items-center peer-checked:after:translate-x-12 peer-hover:after:scale-95 after:z-10">
+                <span className="absolute top-3 left-3 text-white font-bold text-lg z-0">°F</span>
+                <span className="absolute top-3 right-3 text-white font-bold text-lg z-0">°C</span>
               </div>
             </label>
           </div> 

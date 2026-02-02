@@ -105,12 +105,12 @@ const Header = ({ fetchWeather }: HeaderProps) => {
 
   return (
     <div>
-      <header className="grid grid-cols-2 items-start lg:gap-10 gap-5">
+      <header className="grid grid-cols-2 items-start lg:gap-10 gap-5 mb-20">
               {error && <Alert>{error}</Alert>}
         <div className="relative" ref={containerRef}>
           <div className="flex items-center relative">
             <input
-              className="w-full px-4 py-2 rounded-lg border border-slate-300 bg-slate-50 text-primary"
+              className="w-full px-4 py-2 rounded-lg border border-slate-300 backdrop-blur-xl bg-white/70 text-primary shadow-md"
               placeholder="Search city (e.g. Madrid, Spain)"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
@@ -121,7 +121,7 @@ const Header = ({ fetchWeather }: HeaderProps) => {
               onClick={handleSearch}
               aria-label="Search"
             >
-              <FaSearch size={20} />
+              <FaSearch size={20} className="text-primary" />
             </button>
           </div>
 

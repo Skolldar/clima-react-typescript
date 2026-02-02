@@ -9,10 +9,22 @@ import Bar from "./components/Dashboard/Bar"
 const App = () => {
 
   const  {weather, hourlyWeather, notFound, fetchWeather, fetchWeatherByLocation, hasWeatherData, loading} = useWeather()
-  const [isDarkMode, setIsDarkMode] = useState(false)
+  
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    const savedTheme = localStorage.getItem('theme')
+    if (savedTheme !== null) {
+      return savedTheme === 'dark'
+    }
+    // Check system preference
+    return window.matchMedia('(prefers-color-scheme: dark)').matches
+  })
 
   const toggleTheme = () => {
-    setIsDarkMode(!isDarkMode)
+    setIsDarkMode((prev) => {
+      const newMode = !prev
+      localStorage.setItem('theme', newMode ? 'dark' : 'light')
+      return newMode
+    })
   }
 
   useEffect(() => {
@@ -27,9 +39,11 @@ const App = () => {
       </div>
       <div className="flex-1 m-5 px-8 space-y-10">
         <Header fetchWeather={fetchWeather} />
+        <div className="mt-10">
         {loading && <Spinner />}
         {!loading && hasWeatherData && <WeatherDetail weather={weather} hourlyWeather={hourlyWeather}/>}
         {notFound && <Alert>City not found</Alert>}
+        </div>
       </div>
     </main>
     </>

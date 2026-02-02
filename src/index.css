@@ -24,7 +24,8 @@ body {
   background-attachment: fixed;
 }
 .dark-bg {
-  background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgba(19, 113, 128, 1) 0%, rgba(64, 102, 145, 1) 51.2%, rgba(48, 77, 117, 1) 100.1% );  background-repeat: no-repeat;
+  background-image: radial-gradient(circle farthest-corner at 5% 20%, #537895 0%, #355070 51.2%, #09203f 100%);  
+  background-repeat: no-repeat;
   background-attachment: fixed;
 }
 
