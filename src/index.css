@@ -17,8 +17,14 @@ html {
 
 body {
   font-size: 2rem;
+}
+.light-bg {
   background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgba(202,248,255,1) 0%, rgba(186,204,227,1) 51.2%, rgba(117,144,179,1) 100.1% );
   background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+.dark-bg {
+  background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgba(19, 113, 128, 1) 0%, rgba(64, 102, 145, 1) 51.2%, rgba(48, 77, 117, 1) 100.1% );  background-repeat: no-repeat;
   background-attachment: fixed;
 }
 
