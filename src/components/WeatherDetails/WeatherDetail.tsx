@@ -43,6 +43,16 @@ export default function WeatherDetail({weather, hourlyWeather, uvIndex}: Weather
   // Convert wind speed from m/s to km/h
   const convertWindToKmh = (speedMs: number) => Math.round(speedMs * 3.6);
 
+  // UV Index helper: 0 = low (green), 1 = moderate (yellow), 2 = high+ (red)
+  const getUvCategory = (uv?: number | null) => {
+    if (uv == null) return -1
+    if (uv < 3) return 0
+    if (uv < 7) return 1
+    return 2
+  }
+
+  const uvCat = getUvCategory(uvIndex)
+
   return (
     <>
     <div className="grid lg:grid-cols-2 lg:gap-10 grid-cols-1 space-y-2 lg:space-y-8">
