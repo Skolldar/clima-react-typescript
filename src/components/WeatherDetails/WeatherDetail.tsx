@@ -56,11 +56,11 @@ export default function WeatherDetail({weather, hourlyWeather, uvIndex}: Weather
   return (
     <>
     <div className="grid lg:grid-cols-2 lg:gap-10 grid-cols-1 space-y-2 lg:space-y-8">
-        <div className={`blur-card text-primary ${styles.card}`}>
+        <div className={`blur-card ${styles.card}`}>
           <div className="grid grid-cols-2 items-center justify-between py-3">
             <div className="flex items-center justify-start gap-2">
-              <FaLocationDot size={15} />
-              <span className="text-lg">{weather.name}, {weather.sys.country}</span>
+              <FaLocationDot size={20} className="text-primary" />
+              <span className="text-xl font-semibold text-primary">{weather.name}, {weather.sys.country}</span>
             </div>
           <div className="flex flex-col items-end">
             <label className="relative inline-flex items-center cursor-pointer">
@@ -78,17 +78,17 @@ export default function WeatherDetail({weather, hourlyWeather, uvIndex}: Weather
           </div> 
       </div>
           <div className={styles.container}>
-            <div className="grid grid-cols-2 gap-4 items-center">
+            <div className="grid text-primary grid-cols-2 gap-4 items-center">
               <div>
                 <p className={styles.description}>{weather.weather[0].description}</p>
                 <p className={styles.current}>{convertTemp(weather.main.temp)}&deg;{tempUnit}</p>
-              <div className="flex gap-2 items-center justify-start">
+              <div className="flex text-primary gap-2 items-center justify-start">
                   <span className="font-bold">Min: </span><span>{convertTemp(weather.main.temp_min)}&deg;{tempUnit}</span>
                   <span className="font-bold">Max: </span><span>{convertTemp(weather.main.temp_max)}&deg;{tempUnit}</span>
                 </div>
               </div>
               <div className="flex flex-col items-end justify-end">
-                <div className="text-[9rem]">{getWeatherIcon(weather.weather[0].description)}</div>
+                <div className="text-[9rem] text-primary">{getWeatherIcon(weather.weather[0].description)}</div>
                   <p className="flex gap-2 justify-center">
                     <span className="font-bold text-right">Feels Like:</span> 
                     <span>{convertTemp(weather.main.feels_like)}&deg;{tempUnit}</span>
@@ -100,12 +100,12 @@ export default function WeatherDetail({weather, hourlyWeather, uvIndex}: Weather
         
         <div className={`blur-card ${styles.card}`}>
           <h2 className="text-left text-primary font-semibold pb-4">Today Highlight</h2>
-          <div className="grid gap-6 sm:grid-cols-2">
+          <div className="grid gap-6 text-primary sm:grid-cols-2">
             <div className="bg-white/50 shadow-md p-4 rounded-xl flex flex-col items-center">
               <div className="mb-4 flex justify-center">
                 <img src="../wind.png" alt="Wind" className='w-30 h-30' />
               </div>
-              <div className="text-gray-700 text-md font-normal">
+              <div className="text-primary text-md font-normal">
                 <p className="text-2xl font-semibold">{convertWindToKmh(weather.wind.speed)} km/h</p>
               </div>
             </div>
@@ -122,14 +122,14 @@ export default function WeatherDetail({weather, hourlyWeather, uvIndex}: Weather
                       <img src="../uv-high.png" alt="UV high" className="w-20 h-20 mx-auto" />
                     )}
                   </div>
-                    <div className="mt-2 text-center text-2xl font-semibold">{uvIndex == null ? 'UV: —' : `UV: ${uvIndex}`}</div>
+                    <div className="mt-2 text-center text-primary text-2xl font-semibold">{uvIndex == null ? 'UV: —' : `UV: ${uvIndex}`}</div>
                   </div>
             </div>
             <div className="bg-white/50 shadow-md p-4 rounded-xl flex flex-col items-center">
               <div className="mb-4 flex justify-center">
                 <img src="../humidity.png" alt="Humidity" className='w-30 h-30' />
               </div>
-              <div className="text-gray-700 text-md font-normal">
+              <div className="text-primary text-md font-normal">
                 <p className="text-2xl font-semibold">{weather.main.humidity}%</p>
               </div>
             </div>
@@ -137,7 +137,7 @@ export default function WeatherDetail({weather, hourlyWeather, uvIndex}: Weather
               <div className="mb-4 flex justify-center">
                 <img src="../sunset.png" alt="Sunset" className='w-30 h-30' />
               </div>
-              <div className="text-gray-700 text-md font-normal">
+              <div className="text-primary text-md font-normal">
                 <p className="text-2xl font-semibold">{format(new Date(weather.sys.sunset * 1000), 'h:mm a')}</p>
               </div>
             </div>

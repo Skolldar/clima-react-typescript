@@ -27,8 +27,8 @@ const WeatherHours = ({ weather, hourlyWeather, convertTemp, tempUnit }: Weather
 
   return (
     <div>
-      <div className={`blur-card text-primary ${styles.card}`}>
-        <h2 className="font-bold text-4xl mb-8">Today</h2>
+      <div className={`blur-card ${styles.card}`}>
+        <h2 className="font-bold text-primary text-4xl mb-8">Today</h2>
         <div className={styles.container}>
           <div className="overflow-x-auto">
             <div className="grid grid-cols-7 gap-10 py-4 text-center items-center">
@@ -41,9 +41,9 @@ const WeatherHours = ({ weather, hourlyWeather, convertTemp, tempUnit }: Weather
 
                   return (
                     <div key={hour.dt} className="flex flex-col items-center justify-center text-sm space-y-6 rounded-lg">
-                      <div className="text-2xl text-gray-500">{timeLabel}</div>
+                      <div className="text-2xl text-primary">{timeLabel}</div>
                       <div className="text-5xl">{icon}</div>
-                      <div className="font-semibold text-2xl">{convertTemp(hour.main.temp)}&deg;{tempUnit}</div>
+                      <div className="font-semibold text-primary text-2xl">{convertTemp(hour.main.temp)}&deg;{tempUnit}</div>
                     </div>
                   )
                 })
@@ -67,9 +67,9 @@ const WeatherHours = ({ weather, hourlyWeather, convertTemp, tempUnit }: Weather
 
                   return (
                     <div key={i} className="flex flex-col items-center justify-center text-sm space-y-6 rounded-lg">
-                      <div className="text-2xl text-gray-500">{timeLabel}</div>
+                      <div className="text-2xl text-primary">{timeLabel}</div>
                       <div className="text-5xl">{icon}</div>
-                      <div className="font-semibold text-2xl">{temp}&deg;{tempUnit}</div>
+                      <div className="font-semibold text-primary text-2xl">{temp}&deg;{tempUnit}</div>
                     </div>
                   )
                 })
