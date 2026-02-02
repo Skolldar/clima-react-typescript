@@ -53,7 +53,7 @@ export default function WeatherDetail({weather, hourlyWeather, uvIndex}: Weather
 
   return (
     <>
-    <div className="grid lg:grid-cols-2 lg:gap-10 grid-cols-1 space-y-2 lg:space-y-8">
+    <div className="grid lg:grid-cols-2 lg:gap-10 gap-4 grid-cols-1 space-y-2 lg:space-y-8">
         <div className="blur-card">
           <div className="grid grid-cols-2 items-center justify-between py-3">
             <div className="flex items-center justify-start gap-2">
@@ -76,19 +76,26 @@ export default function WeatherDetail({weather, hourlyWeather, uvIndex}: Weather
           </div> 
       </div>
           <div className={styles.container}>
-            <div className="grid text-primary grid-cols-2 gap-4 items-center">
+            <div className="grid text-primary grid-cols-1 md:grid-cols-2 gap-4 justify-center items-center">
               <div>
                 <p className={`py-4 ${styles.description}`}>{weather.weather[0].description}</p>
-                <p className={`py-4 ${styles.current}`}>{convertTemp(weather.main.temp)}&deg;{tempUnit}</p>
-              <div className="flex text-primary gap-2 items-center justify-start">
+                <div className="flex items-center gap-4">
+                  <p className={`py-8 ${styles.current}`}>{convertTemp(weather.main.temp)}&deg;{tempUnit}</p>
+                    <div className="text-8xl mb-8 ml-8 md:hidden">{getWeatherIcon(weather.weather[0].description)}</div>
+                </div>
+                <span className="font-semibold md:hidden flex">Feels:<span className="ml-2 font-normal">{convertTemp(weather.main.feels_like)}&deg;{tempUnit}</span></span>
+              <div className="flex text-primary gap-2 items-center justify-start mt-2">
                   <span className="font-bold">Min: </span><span>{convertTemp(weather.main.temp_min)}&deg;{tempUnit}</span>
                   <span className="font-bold">Max: </span><span>{convertTemp(weather.main.temp_max)}&deg;{tempUnit}</span>
                 </div>
               </div>
               <div className="flex flex-col items-end justify-end">
-                <div className="text-[10rem] py-4 text-primary">{getWeatherIcon(weather.weather[0].description)}</div>
-                  <p className="flex gap-2 justify-center">
-                    <span className="font-bold text-right">Feels Like:</span> 
+                <div className="lg:text-[10rem] text-5xl lg:py-10 py-4 text-primary hidden md:block">
+                  {
+                    getWeatherIcon(weather.weather[0].description)
+                  }
+                </div>
+                  <p className=" gap-2 pt-4 md:pt-12 justify-start hidden md:justify-center items-center">
                     <span>{convertTemp(weather.main.feels_like)}&deg;{tempUnit}</span>
                   </p>
               </div>

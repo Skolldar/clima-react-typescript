@@ -33,11 +33,11 @@ const App = () => {
 
   return (
     <>
-    <main className={`${isDarkMode ? 'dark-bg' : 'light-bg'} p-10 flex min-h-screen`}>
-      <div>
+    <main className={`${isDarkMode ? 'dark-bg' : 'light-bg'} lg:p-10 py-4 flex min-h-screen`}>
+      <div className="ml-2 md:ml-0">
         <Bar isDarkMode={isDarkMode} toggleTheme={toggleTheme} />
       </div>
-      <div className="flex-1 px-8 space-y-6">
+      <div className="flex-1 lg:px-8 px-2 space-y-6">
         <Header fetchWeather={fetchWeather} />
         <div className="mt-10">
         {loading && <div className="flex justify-center items-center relative"><Spinner /></div>}

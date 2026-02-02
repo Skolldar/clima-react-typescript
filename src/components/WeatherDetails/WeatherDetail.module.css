@@ -1,10 +1,11 @@
 .container {
     border-radius: 1rem;
     text-align: center;
+    padding: 2rem 0;
 }
 
 .current {
-    font-size: 6rem;
+    font-size: 3.5rem;
     font-weight: 900;
     display: flex;
     justify-content: start;
@@ -13,11 +14,11 @@
 }
 .description {
     display: flex;
-    font-size: 1.5rem;
+    font-size: 1rem;
     font-weight: 600;
     text-transform: capitalize;
     margin-bottom: 1rem;
-    text-align: center;
+    text-align: left;
 }
 
 .temperatures {
@@ -46,7 +47,16 @@
 
 @media (min-width:798px) {
     .container {
-        margin-top: 1rem;
+        margin-top: 3rem;
+    }
+
+    .current {
+        font-size: 6rem;
+    }
+
+    .description {
+        font-size: 1.5rem;
+        text-align: center;
     }
 
     .temperatures{
