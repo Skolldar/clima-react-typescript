@@ -8,7 +8,7 @@ import Bar from "./components/Dashboard/Bar"
 
 const App = () => {
 
-  const  {weather, hourlyWeather, notFound, fetchWeather, fetchWeatherByLocation, hasWeatherData, loading} = useWeather()
+  const  {weather, hourlyWeather, notFound, fetchWeather, fetchWeatherByLocation, hasWeatherData, loading, uvIndex} = useWeather()
   
   const [isDarkMode, setIsDarkMode] = useState(() => {
     const savedTheme = localStorage.getItem('theme')
@@ -41,7 +41,7 @@ const App = () => {
         <Header fetchWeather={fetchWeather} />
         <div className="mt-10">
         {loading && <Spinner />}
-        {!loading && hasWeatherData && <WeatherDetail weather={weather} hourlyWeather={hourlyWeather}/>}
+        {!loading && hasWeatherData && <WeatherDetail weather={weather} hourlyWeather={hourlyWeather} uvIndex={uvIndex} />}
         {notFound && <Alert>City not found</Alert>}
         </div>
       </div>

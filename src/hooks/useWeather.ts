@@ -85,7 +85,6 @@ const initialState = {
 
 const initialHourlyState: HourlyWeather[] = []
 
-
 export default function useWeather() {
 
   //Loading:
@@ -93,6 +92,7 @@ export default function useWeather() {
   const [notFound, setNotFound] = useState(false)
   const [weather, setWeather] = useState<Weather>(initialState)
   const [hourlyWeather, setHourlyWeather] = useState<HourlyWeather[]>(initialHourlyState)
+  const [uvIndex, setUvIndex] = useState<number | null>(null)
 
     //Asincrona para hacer el llamado de la API (bloquea el codigo hasta que tengamos una respuesta)
     const fetchWeather = async (search: SearchType) => {
@@ -127,10 +127,12 @@ export default function useWeather() {
             
             const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${appId}`
             const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${appId}`
+            const openMeteoUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=uv_index&timezone=auto`
 
-            const [weatherResponse, forecastResponse] = await Promise.all([
+            const [weatherResponse, forecastResponse, openMeteoResponse] = await Promise.all([
               axios(weatherUrl),
-              axios(forecastUrl)
+              axios(forecastUrl),
+              axios(openMeteoUrl),
             ])
 
             const weatherResult = parse(WeatherSchema, weatherResponse.data)
@@ -141,7 +143,35 @@ export default function useWeather() {
             const hourlyData = forecastData.slice(0, 7).map((item: void) => 
               parse(HourlyWeatherSchema, item)
             )
-            console.log(hourlyData)
+            console.log('time', hourlyData)
+
+            // Parse UV index from Open-Meteo (hourly). Pick nearest hour to now.
+            try {
+              const omHourly = openMeteoResponse?.data?.hourly
+              const times: string[] = omHourly?.time || []
+              const uvs: number[] = omHourly?.uv_index || []
+              if (times.length && uvs.length) {
+                let minDiff = Infinity
+                let idx = 0
+                const now = Date.now()
+                for (let i = 0; i < times.length; i++) {
+                  const t = Date.parse(times[i])
+                  const diff = Math.abs(t - now)
+                  if (diff < minDiff) {
+                    minDiff = diff
+                    idx = i
+                  }
+                }
+                const currentUv = typeof uvs[idx] === 'number' ? uvs[idx] : null
+                setUvIndex(currentUv)
+              } else {
+                setUvIndex(null)
+              }
+            } catch (error) {
+              console.log(error)
+              setUvIndex(null)
+            }
+
 
             if(weatherResult){
               const countryName = countries.find(c => c.code === geoCountryCode)?.name ?? weatherResult.sys.country
@@ -186,16 +216,44 @@ export default function useWeather() {
                 try {
                     const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${appId}`;
                     const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${appId}`;
-
-                    const [weatherResponse, forecastResponse] = await Promise.all([
-                        axios(weatherUrl),
-                        axios(forecastUrl)
-                    ]);
+                        const openMeteoUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=uv_index&timezone=auto`
+                        const [weatherResponse, forecastResponse, openMeteoResponse] = await Promise.all([
+                          axios(weatherUrl),
+                          axios(forecastUrl),
+                          axios(openMeteoUrl),
+                        ]);
 
                     const weatherResult = parse(WeatherSchema, weatherResponse.data);
 
                     const forecastData = forecastResponse.data.list || [];
                     const hourlyData = forecastData.slice(0, 7).map((item: void) => parse(HourlyWeatherSchema, item));
+
+                    try {
+                      const omHourly = openMeteoResponse?.data?.hourly
+                      const times: string[] = omHourly?.time || []
+                      const uvs: number[] = omHourly?.uv_index || []
+                      if (times.length && uvs.length) {
+                        let minDiff = Infinity
+                        let idx = 0
+                        const now = Date.now()
+                        for (let i = 0; i < times.length; i++) {
+                          const t = Date.parse(times[i])
+                          const diff = Math.abs(t - now)
+                          if (diff < minDiff) {
+                            minDiff = diff
+                            idx = i
+                          }
+                        }
+                        const currentUv = typeof uvs[idx] === 'number' ? uvs[idx] : null
+                        setUvIndex(currentUv)
+                        console.log(currentUv)
+                      } else {
+                        setUvIndex(null)
+                      }
+                    } catch (error) {
+                      console.log(error)
+                      setUvIndex(null)
+                    }
 
                     const countryName = countries.find(c => c.code === weatherResult.sys.country)?.name ?? weatherResult.sys.country;
 
@@ -232,8 +290,9 @@ export default function useWeather() {
     hourlyWeather,
     loading,
     notFound,
-    fetchWeather,
+      fetchWeather,
     fetchWeatherByLocation,
-    hasWeatherData
+      hasWeatherData,
+      uvIndex,
   }
 }

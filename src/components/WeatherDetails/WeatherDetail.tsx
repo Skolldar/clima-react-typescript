@@ -5,13 +5,15 @@ import { FaLocationDot } from "react-icons/fa6";
 import { useState } from "react";
 import WeatherHours from "./WeatherHours";
 import WeatherSunTime from "./WeatherSunTime";
+import { format } from 'date-fns'
 
 
 type WeatherDetailProps = {
     weather: Weather
     hourlyWeather: HourlyWeather[]
+  uvIndex?: number | null
 }
-export default function WeatherDetail({weather, hourlyWeather}: WeatherDetailProps) {
+export default function WeatherDetail({weather, hourlyWeather, uvIndex}: WeatherDetailProps) {
   const [isFahrenheit, setIsFahrenheit] = useState(false);
   
   // Convert Celsius to Fahrenheit
@@ -38,34 +40,19 @@ export default function WeatherDetail({weather, hourlyWeather}: WeatherDetailPro
       : '☀️'
   }
 
-  // Calculate chance of rain from hourly forecast
-  const chanceOfRain = hourlyWeather.length > 0 && hourlyWeather[0].pop !== undefined
-    ? `${Math.round(hourlyWeather[0].pop * 100)}%`
-    : '0%';
+  // Convert wind speed from m/s to km/h
+  const convertWindToKmh = (speedMs: number) => Math.round(speedMs * 3.6);
 
-  // Information sections data
-  const infoSections = [
-    {
-      label: 'Chance of Rain',
-      content: chanceOfRain,
-      icon: '🌧️'
-    },
-    {
-      label: 'Wind Speed',
-      content: `${weather.wind.speed.toFixed(1)} m/s`,
-      icon: '💨'
-    },
-    {
-      label: 'UV Index',
-      content: `${(weather.main.temp / 10).toFixed(1)}`, // Placeholder calculation
-      icon: '🍃'
-    },
-    {
-      label: 'Humidity',
-      content: `${weather.main.humidity}%`,
-      icon: '💧'
-    }
-  ];
+  // UV Index helper: 0 = low (green), 1 = moderate (yellow), 2 = high+ (red)
+  const getUvCategory = (uv?: number | null) => {
+    if (uv == null) return -1
+    if (uv < 3) return 0
+    if (uv < 7) return 1
+    return 2
+  }
+
+  const uvCat = getUvCategory(uvIndex)
+
   return (
     <>
     <div className="grid lg:grid-cols-2 lg:gap-10 grid-cols-1 space-y-2 lg:space-y-8">
@@ -111,21 +98,52 @@ export default function WeatherDetail({weather, hourlyWeather}: WeatherDetailPro
           </div>
         </div>
         
-        <div className={`blur-card text-primary ${styles.card}`}>
+        <div className={`blur-card ${styles.card}`}>
+          <h2 className="text-left text-primary font-semibold pb-4">Today Highlight</h2>
           <div className="grid gap-6 sm:grid-cols-2">
-            {infoSections.map(({ label, content, icon }) => (
-              <div
-                key={label}
-                className="max-w-3xl mx-auto rounded-2xl lg:p-8 px-4 py-4"
-              >
-                <div className="text-gray-800 font-bold text-xl mb-4">{icon} {label}</div>
-                <div className="text-gray-700 text-md font-normal">
-                  {content && <p>{content}</p>}
-                </div>
+            <div className="bg-white/50 shadow-md p-4 rounded-xl flex flex-col items-center">
+              <div className="mb-4 flex justify-center">
+                <img src="../wind.png" alt="Wind" className='w-30 h-30' />
               </div>
-            ))}
+              <div className="text-gray-700 text-md font-normal">
+                <p className="text-2xl font-semibold">{convertWindToKmh(weather.wind.speed)} km/h</p>
+              </div>
+            </div>
+            <div className="bg-white/50 shadow-md p-4 rounded-xl flex flex-col items-center"> 
+                  <div className="mt-3 flex flex-col items-center">
+                  <div className="mb-2">
+                    {uvCat === -1 ? (
+                      <img src="../uv-low.png" alt="UV unknown" className="w-20 h-20 mx-auto" />
+                    ) : uvCat === 0 ? (
+                      <img src="../uv-low.png" alt="UV low" className="w-20 h-20 mx-auto" />
+                    ) : uvCat === 1 ? (
+                      <img src="../uv-medium.png" alt="UV medium" className="w-20 h-20 mx-auto" />
+                    ) : (
+                      <img src="../uv-high.png" alt="UV high" className="w-20 h-20 mx-auto" />
+                    )}
+                  </div>
+                    <div className="mt-2 text-center text-2xl font-semibold">{uvIndex == null ? 'UV: —' : `UV: ${uvIndex}`}</div>
+                  </div>
+            </div>
+            <div className="bg-white/50 shadow-md p-4 rounded-xl flex flex-col items-center">
+              <div className="mb-4 flex justify-center">
+                <img src="../humidity.png" alt="Humidity" className='w-30 h-30' />
+              </div>
+              <div className="text-gray-700 text-md font-normal">
+                <p className="text-2xl font-semibold">{weather.main.humidity}%</p>
+              </div>
+            </div>
+            <div className="bg-white/50 shadow-md p-4 rounded-xl flex flex-col items-center">
+              <div className="mb-4 flex justify-center">
+                <img src="../sunset.png" alt="Sunset" className='w-30 h-30' />
+              </div>
+              <div className="text-gray-700 text-md font-normal">
+                <p className="text-2xl font-semibold">{format(new Date(weather.sys.sunset * 1000), 'h:mm a')}</p>
+              </div>
+            </div>
           </div>
         </div>
+
           <WeatherHours 
           weather={weather} 
           hourlyWeather={hourlyWeather} 
