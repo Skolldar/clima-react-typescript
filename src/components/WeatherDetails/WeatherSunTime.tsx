@@ -1,5 +1,4 @@
 import { format } from 'date-fns'
-import styles from "./WeatherDetail.module.css"
 import { Weather } from '../../hooks/useWeather'
 
 type WeatherSunTimeProps = {
@@ -9,10 +8,10 @@ type WeatherSunTimeProps = {
 const WeatherSunTime = ({weather}: WeatherSunTimeProps) => {
   return (
     <>
-    <div className={`blur-card ${styles.card}`}>
-          <h2 className="font-bold text-primary text-4xl">Sunset and Sunrise</h2>
-          <div className="grid gap-6 text-primary sm:grid-cols-2">
-            <div className="">
+    <div className="blur-card">
+          <h2 className="font-semibold text-primary text-left pb-4">Sunset and Sunrise</h2>
+          <div className="mt-2 grid items-center gap-6 text-primary sm:grid-cols-2">
+          <div className="bg-white/50 shadow-md p-4 rounded-xl flex flex-col items-center">
               <div className="mb-4 flex justify-center">
                 <img src="../sunrise.png" alt="Sunrise" className='w-30 h-30' />
               </div>
@@ -20,7 +19,7 @@ const WeatherSunTime = ({weather}: WeatherSunTimeProps) => {
                 <p className="text-2xl font-semibold">{format(new Date(weather.sys.sunrise * 1000), 'h:mm a')}</p>
               </div>
             </div>
-            <div className=" ">
+          <div className="bg-white/50 shadow-md p-4 rounded-xl flex flex-col items-center">
               <div className="mb-4 flex justify-center">
                 <img src="../sunset.png" alt="Sunset" className='w-30 h-30' />
               </div>

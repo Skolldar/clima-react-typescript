@@ -1,7 +1,6 @@
 import { Weather, HourlyWeather } from "../../hooks/useWeather"
 import { formatTemperature } from "../../utils"
 import { format } from 'date-fns'
-import styles from "./WeatherDetail.module.css"
 
 type WeatherHoursProps = {
   weather: Weather
@@ -27,11 +26,11 @@ const WeatherHours = ({ weather, hourlyWeather, convertTemp, tempUnit }: Weather
 
   return (
     <div>
-      <div className={`blur-card ${styles.card}`}>
-        <h2 className="font-bold text-primary text-4xl mb-8">Today</h2>
-        <div className={styles.container}>
-          <div className="overflow-x-auto">
-            <div className="grid grid-cols-7 gap-10 py-4 text-center items-center">
+      <div className="blur-card">
+        <h2 className="font-semibold text-left text-primary pb-4">Today</h2>
+        <div className="">
+          <div className=" bg-white/50 shadow-md py-2 rounded-xl">
+            <div className="grid grid-cols-7 gap-2 text-center items-center">
               {hourlyWeather.length > 0 ? (
                 hourlyWeather.map((hour) => {
                   const hourDate = new Date(hour.dt * 1000)
@@ -40,7 +39,7 @@ const WeatherHours = ({ weather, hourlyWeather, convertTemp, tempUnit }: Weather
                   const icon = getWeatherIcon(desc)
 
                   return (
-                    <div key={hour.dt} className="flex flex-col items-center justify-center text-sm space-y-6 rounded-lg">
+                    <div key={hour.dt} className="flex flex-col items-center justify-center space-y-6 rounded-lg">
                       <div className="text-2xl text-primary">{timeLabel}</div>
                       <div className="text-5xl">{icon}</div>
                       <div className="font-semibold text-primary text-2xl">{convertTemp(hour.main.temp)}&deg;{tempUnit}</div>
@@ -66,7 +65,7 @@ const WeatherHours = ({ weather, hourlyWeather, convertTemp, tempUnit }: Weather
                     : '☀️'
 
                   return (
-                    <div key={i} className="flex flex-col items-center justify-center text-sm space-y-6 rounded-lg">
+                    <div key={i} className="flex flex-col items-center justify-center space-y-6 rounded-lg">
                       <div className="text-2xl text-primary">{timeLabel}</div>
                       <div className="text-5xl">{icon}</div>
                       <div className="font-semibold text-primary text-2xl">{temp}&deg;{tempUnit}</div>

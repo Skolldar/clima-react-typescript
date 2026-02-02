@@ -56,7 +56,7 @@ export default function WeatherDetail({weather, hourlyWeather, uvIndex}: Weather
   return (
     <>
     <div className="grid lg:grid-cols-2 lg:gap-10 grid-cols-1 space-y-2 lg:space-y-8">
-        <div className={`blur-card ${styles.card}`}>
+        <div className="blur-card">
           <div className="grid grid-cols-2 items-center justify-between py-3">
             <div className="flex items-center justify-start gap-2">
               <FaLocationDot size={20} className="text-primary" />
@@ -80,15 +80,15 @@ export default function WeatherDetail({weather, hourlyWeather, uvIndex}: Weather
           <div className={styles.container}>
             <div className="grid text-primary grid-cols-2 gap-4 items-center">
               <div>
-                <p className={styles.description}>{weather.weather[0].description}</p>
-                <p className={styles.current}>{convertTemp(weather.main.temp)}&deg;{tempUnit}</p>
+                <p className={`py-4 ${styles.description}`}>{weather.weather[0].description}</p>
+                <p className={`py-4 ${styles.current}`}>{convertTemp(weather.main.temp)}&deg;{tempUnit}</p>
               <div className="flex text-primary gap-2 items-center justify-start">
                   <span className="font-bold">Min: </span><span>{convertTemp(weather.main.temp_min)}&deg;{tempUnit}</span>
                   <span className="font-bold">Max: </span><span>{convertTemp(weather.main.temp_max)}&deg;{tempUnit}</span>
                 </div>
               </div>
               <div className="flex flex-col items-end justify-end">
-                <div className="text-[9rem] text-primary">{getWeatherIcon(weather.weather[0].description)}</div>
+                <div className="text-[10rem] py-4 text-primary">{getWeatherIcon(weather.weather[0].description)}</div>
                   <p className="flex gap-2 justify-center">
                     <span className="font-bold text-right">Feels Like:</span> 
                     <span>{convertTemp(weather.main.feels_like)}&deg;{tempUnit}</span>
@@ -98,7 +98,7 @@ export default function WeatherDetail({weather, hourlyWeather, uvIndex}: Weather
           </div>
         </div>
         
-        <div className={`blur-card ${styles.card}`}>
+        <div className="blur-card">
           <h2 className="text-left text-primary font-semibold pb-4">Today Highlight</h2>
           <div className="grid gap-6 text-primary sm:grid-cols-2">
             <div className="bg-white/50 shadow-md p-4 rounded-xl flex flex-col items-center">

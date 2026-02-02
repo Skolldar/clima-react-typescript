@@ -58,10 +58,6 @@
     }
 }
 
-.card {
-    position: relative;
-}
-
 .spinnerWrapper {
     position: absolute;
     inset: 0;
