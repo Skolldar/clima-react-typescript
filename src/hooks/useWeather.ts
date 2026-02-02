@@ -32,6 +32,8 @@ const WeatherSchema = object({
       description: string()
     })
   )
+  ,
+  visibility: number()
 })
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -52,6 +54,7 @@ export type Weather = InferOutput<typeof WeatherSchema> //InferOutput to define 
 
 const initialState = {
   name: '',
+  visibility: 0,
   main: {
     temp: 0,
     temp_max: 0,
@@ -119,14 +122,13 @@ export default function useWeather() {
             const lon = data[0].lon
             const geoCountryCode = data[0].country
             
-            const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${appId}`
+            const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${appId}&units=metric`
             const openMeteoUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=temperature_2m,weathercode,windspeed_10m,precipitation_probability,uv_index&timezone=auto&forecast_days=2`
 
             const [weatherResponse, openMeteoResponse] = await Promise.all([
               axios(weatherUrl),
               axios(openMeteoUrl),
             ])
-
             const weatherResult = parse(WeatherSchema, weatherResponse.data)
             console.log(weatherResult)
 
@@ -231,7 +233,7 @@ export default function useWeather() {
                 const lon = position.coords.longitude;
 
                 try {
-                    const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${appId}`;
+                    const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${appId}&units=metric`;
                     const openMeteoUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=temperature_2m,weathercode,windspeed_10m,precipitation_probability,uv_index&timezone=auto&forecast_days=2`
                     const [weatherResponse, openMeteoResponse] = await Promise.all([
                       axios(weatherUrl),

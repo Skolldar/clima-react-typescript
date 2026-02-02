@@ -5,8 +5,6 @@ import { FaLocationDot } from "react-icons/fa6";
 import { useState } from "react";
 import WeatherHours from "./WeatherHours";
 import WeatherSunTime from "./WeatherSunTime";
-import { format } from 'date-fns'
-
 
 type WeatherDetailProps = {
     weather: Weather
@@ -101,44 +99,48 @@ export default function WeatherDetail({weather, hourlyWeather, uvIndex}: Weather
         <div className="blur-card">
           <h2 className="text-left text-primary font-semibold pb-4">Today Highlight</h2>
           <div className="grid gap-6 text-primary sm:grid-cols-2">
-            <div className="bg-white/50 shadow-md p-4 rounded-xl flex flex-col items-center">
-              <div className="mb-4 flex justify-center">
-                <img src="../wind.png" alt="Wind" className='w-30 h-30' />
+            <div className="bg-white/50 shadow-md p-8 rounded-xl flex flex-col items-center">
+                <h3 className="text-2xl">Wind</h3>
+              <div className="mb-4 flex items-center justify-center">
+                <img src="../wind.png" alt="Wind" className='w-29 h-29' />
               </div>
               <div className="text-primary text-md font-normal">
                 <p className="text-2xl font-semibold">{convertWindToKmh(weather.wind.speed)} km/h</p>
               </div>
             </div>
             <div className="bg-white/50 shadow-md p-4 rounded-xl flex flex-col items-center"> 
-                  <div className="mt-3 flex flex-col items-center">
+              <h3 className="text-2xl">UV Index</h3>
+                  <div className="mt-3 flex flex-col items-center justify-center">
                   <div className="mb-2">
                     {uvCat === -1 ? (
-                      <img src="../uv-low.png" alt="UV unknown" className="w-20 h-20 mx-auto" />
+                      <img src="../uv-low.png" alt="UV unknown" className="w-30 h-30 mx-auto" />
                     ) : uvCat === 0 ? (
-                      <img src="../uv-low.png" alt="UV low" className="w-20 h-20 mx-auto" />
+                      <img src="../uv-low.png" alt="UV low" className="w-30 h-30 mx-auto" />
                     ) : uvCat === 1 ? (
-                      <img src="../uv-medium.png" alt="UV medium" className="w-20 h-20 mx-auto" />
+                      <img src="../uv-medium.png" alt="UV medium" className="w-30 h-30 mx-auto" />
                     ) : (
-                      <img src="../uv-high.png" alt="UV high" className="w-20 h-20 mx-auto" />
+                      <img src="../uv-high.png" alt="UV high" className="w-30 h-30 mx-auto" />
                     )}
                   </div>
-                    <div className="mt-2 text-center text-primary text-2xl font-semibold">{uvIndex == null ? 'UV: —' : `UV: ${uvIndex}`}</div>
+                    <div className=" mt-4 text-center text-primary text-2xl font-semibold">{uvIndex == null ? 'UV: —' : `UV: ${uvIndex}`}</div>
                   </div>
             </div>
             <div className="bg-white/50 shadow-md p-4 rounded-xl flex flex-col items-center">
-              <div className="mb-4 flex justify-center">
-                <img src="../humidity.png" alt="Humidity" className='w-30 h-30' />
+            <h3 className="text-2xl">Humidity</h3>
+              <div className="mb-4 flex items-center justify-center">
+                <img src="../humidity.png" alt="Humidity" className='w-29 h-29' />
               </div>
               <div className="text-primary text-md font-normal">
-                <p className="text-2xl font-semibold">{weather.main.humidity}%</p>
+                <p className="text-2xl mt-1 font-semibold">{weather.main.humidity}%</p>
               </div>
             </div>
             <div className="bg-white/50 shadow-md p-4 rounded-xl flex flex-col items-center">
-              <div className="mb-4 flex justify-center">
-                <img src="../sunset.png" alt="Sunset" className='w-30 h-30' />
+            <h3 className="text-2xl">Visibility</h3>
+              <div className="mb-4 flex items-center justify-center">
+                <img src="../fog.png" alt="Visibility" className='w-29 h-29' />
               </div>
               <div className="text-primary text-md font-normal">
-                <p className="text-2xl font-semibold">{format(new Date(weather.sys.sunset * 1000), 'h:mm a')}</p>
+                <p className="text-2xl font-semibold">{weather.visibility} m</p>
               </div>
             </div>
           </div>

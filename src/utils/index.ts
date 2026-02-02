@@ -1,10 +1,10 @@
-import { format } from 'date-fns'; // Import date-fns for time formatting
+import { format } from 'date-fns';
 
 //cambiar el formato a celsius
 export const formatTemperature = (temperature: number ) : number => {
-    const kelvin = 273.15
-    return parseInt((temperature - kelvin).toString())
-    //parseInt(()) redondea el resultado... y le ponemos toString() para evitar el error que teniamos... 
+  // The API is requested with `units=metric`, so temperatures are already in Celsius.
+  // Return a rounded integer Celsius value.
+  return Math.round(temperature);
 }
 
 

@@ -5,12 +5,9 @@ type BarProps = {
 
 const Bar = ({ isDarkMode, toggleTheme }: BarProps) => {
   return (
-    <div className="blur-bar h-full text-primary sticky top-0 space-y-20">
+    <div className="blur-bar h-full text-primary sticky top-0 space-y-15">
       <div className="flex items-center justify-center gap-3">
         <img src="../sun.png" alt="Logo" className="w-20 h-20" />
-        {/* <h1 className="text-3xl font-bold">
-            Skyline
-        </h1> */}
       </div>
       <div>
       <div className="flex items-center gap-4">
@@ -22,7 +19,7 @@ const Bar = ({ isDarkMode, toggleTheme }: BarProps) => {
             onChange={toggleTheme}
           />
           <div
-            className="w-20 h-11 rounded-full bg-linear-to-r from-yellow-300 to-orange-400 peer-checked:from-cyan-700 peer-checked:to-blue-900 transition-all duration-500 after:content-['☀️'] after:absolute after:top-1 after:left-1 after:bg-white after:rounded-full after:h-9 after:w-9 after:flex after:items-center after:justify-center after:transition-all after:duration-500 peer-checked:after:translate-x-9 peer-checked:after:content-['🌙'] after:shadow-md after:text-lg"
+            className="w-21 h-12 rounded-full bg-linear-to-r from-yellow-300 to-orange-400 peer-checked:from-cyan-700 peer-checked:to-blue-900 transition-all duration-500 after:content-['☀️'] after:absolute after:top-1 after:left-1 after:bg-white after:rounded-full after:h-10 after:w-10 after:flex after:items-center after:justify-center after:transition-all after:duration-500 peer-checked:after:translate-x-9 peer-checked:after:content-['🌙'] after:shadow-md after:text-lg"
           ></div>
         </label>
       </div> 

@@ -105,13 +105,13 @@ const Header = ({ fetchWeather }: HeaderProps) => {
 
   return (
     <div>
-      <header className="grid grid-cols-2 items-start lg:gap-10 gap-5 mb-20">
+      <header className="grid lg:grid-cols-2  grid-cols-1 items-start lg:gap-10 gap-5 mb-8">
               {error && <Alert>{error}</Alert>}
         <div className="relative" ref={containerRef}>
           <div className="flex items-center relative">
             <input
               className="w-full px-4 py-2 rounded-lg border border-slate-300 backdrop-blur-xl bg-white/70 text-primary shadow-md"
-              placeholder="Search city (e.g. Madrid, Spain)"
+              placeholder="e.g. Madrid, Spain"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               onFocus={() => { if (suggestions.length) setOpen(true); }}

@@ -37,7 +37,7 @@ const App = () => {
       <div>
         <Bar isDarkMode={isDarkMode} toggleTheme={toggleTheme} />
       </div>
-      <div className="flex-1 m-5 px-8 space-y-10">
+      <div className="flex-1 px-8 space-y-6">
         <Header fetchWeather={fetchWeather} />
         <div className="mt-10">
         {loading && <div className="flex justify-center items-center relative"><Spinner /></div>}
