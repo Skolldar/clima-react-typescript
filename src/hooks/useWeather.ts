@@ -34,20 +34,13 @@ const WeatherSchema = object({
   )
 })
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const HourlyWeatherSchema = object({
-  dt: number(),
-  main: object({
-    temp: number(),
-  }),
-  weather: array(
-    object({
-      description: string()
-    })
-  ),
-  wind: object({
-    speed: number()
-  }),
-  pop: number()
+  time: string(),
+  temperature_2m: number(),
+  weathercode: number(),
+  windspeed_10m: number(),
+  precipitation_probability: number()
 })
 
 export type HourlyWeather = InferOutput<typeof HourlyWeatherSchema>
@@ -107,7 +100,8 @@ export default function useWeather() {
 
         //try catch permite que al tener un error puedas debuguear
         try {
-            const geoUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${search.city},${search.country}&appid=${appId}`
+            const countryCode = countries.find(c => c.name.toLowerCase() === (search.country || '').toLowerCase())?.code ?? search.country
+            const geoUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${search.city},${countryCode}&appid=${appId}`
           console.log(geoUrl)
 
             const {data} = await axios(geoUrl)
@@ -126,24 +120,47 @@ export default function useWeather() {
             const geoCountryCode = data[0].country
             
             const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${appId}`
-            const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${appId}`
-            const openMeteoUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=uv_index&timezone=auto`
+            const openMeteoUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=temperature_2m,weathercode,windspeed_10m,precipitation_probability,uv_index&timezone=auto&forecast_days=2`
 
-            const [weatherResponse, forecastResponse, openMeteoResponse] = await Promise.all([
+            const [weatherResponse, openMeteoResponse] = await Promise.all([
               axios(weatherUrl),
-              axios(forecastUrl),
               axios(openMeteoUrl),
             ])
 
             const weatherResult = parse(WeatherSchema, weatherResponse.data)
             console.log(weatherResult)
 
-            // Parse hourly forecast data - get next 7 readings (roughly 24 hours)
-            const forecastData = forecastResponse.data.list || []
-            const hourlyData = forecastData.slice(0, 7).map((item: void) => 
-              parse(HourlyWeatherSchema, item)
-            )
-            console.log('time', hourlyData)
+            // Parse hourly forecast data from Open-Meteo (next 24 hours)
+            const hourlyData: HourlyWeather[] = []
+            try {
+              const omHourly = openMeteoResponse?.data?.hourly
+              if (omHourly) {
+                const times: string[] = omHourly.time || []
+                const temps: number[] = omHourly.temperature_2m || []
+                const codes: number[] = omHourly.weathercode || []
+                const winds: number[] = omHourly.windspeed_10m || []
+                const precips: number[] = omHourly.precipitation_probability || []
+                
+                const now = new Date()
+                const next24Hours = new Date(now.getTime() + 24 * 60 * 60 * 1000)
+                
+                for (let i = 0; i < times.length && hourlyData.length < 24; i++) {
+                  const time = new Date(times[i])
+                  if (time >= now && time <= next24Hours) {
+                    hourlyData.push({
+                      time: times[i],
+                      temperature_2m: temps[i] ?? 0,
+                      weathercode: codes[i] ?? 0,
+                      windspeed_10m: winds[i] ?? 0,
+                      precipitation_probability: precips[i] ?? 0
+                    })
+                  }
+                }
+              }
+            } catch (error) {
+              console.log('Error parsing hourly data:', error)
+            }
+            console.log('hourly forecast:', hourlyData)
 
             // Parse UV index from Open-Meteo (hourly). Pick nearest hour to now.
             try {
@@ -215,19 +232,45 @@ export default function useWeather() {
 
                 try {
                     const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${appId}`;
-                    const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${appId}`;
-                        const openMeteoUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=uv_index&timezone=auto`
-                        const [weatherResponse, forecastResponse, openMeteoResponse] = await Promise.all([
-                          axios(weatherUrl),
-                          axios(forecastUrl),
-                          axios(openMeteoUrl),
-                        ]);
+                    const openMeteoUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=temperature_2m,weathercode,windspeed_10m,precipitation_probability,uv_index&timezone=auto&forecast_days=2`
+                    const [weatherResponse, openMeteoResponse] = await Promise.all([
+                      axios(weatherUrl),
+                      axios(openMeteoUrl),
+                    ]);
 
                     const weatherResult = parse(WeatherSchema, weatherResponse.data);
 
-                    const forecastData = forecastResponse.data.list || [];
-                    const hourlyData = forecastData.slice(0, 7).map((item: void) => parse(HourlyWeatherSchema, item));
-
+                    // Parse hourly forecast data from Open-Meteo (next 24 hours)
+                    const hourlyData: HourlyWeather[] = []
+                    try {
+                      const omHourly = openMeteoResponse?.data?.hourly
+                      if (omHourly) {
+                        const times: string[] = omHourly.time || []
+                        const temps: number[] = omHourly.temperature_2m || []
+                        const codes: number[] = omHourly.weathercode || []
+                        const winds: number[] = omHourly.windspeed_10m || []
+                        const precips: number[] = omHourly.precipitation_probability || []
+                        
+                        const now = new Date()
+                        const next24Hours = new Date(now.getTime() + 24 * 60 * 60 * 1000)
+                        
+                        for (let i = 0; i < times.length && hourlyData.length < 24; i++) {
+                          const time = new Date(times[i])
+                          if (time >= now && time <= next24Hours) {
+                            hourlyData.push({
+                              time: times[i],
+                              temperature_2m: temps[i] ?? 0,
+                              weathercode: codes[i] ?? 0,
+                              windspeed_10m: winds[i] ?? 0,
+                              precipitation_probability: precips[i] ?? 0
+                            })
+                          }
+                        }
+                      }
+                    } catch (error) {
+                      console.log('Error parsing hourly data:', error)
+                    }
+                    console.log('hourly forecast:', hourlyData)
                     try {
                       const omHourly = openMeteoResponse?.data?.hourly
                       const times: string[] = omHourly?.time || []
