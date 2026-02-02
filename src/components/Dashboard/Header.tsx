@@ -1,5 +1,5 @@
 import { FaSearch } from "react-icons/fa";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type KeyboardEvent } from "react";
 import type { SearchType } from "../../types/types-index";
 import { countries } from "../../data/countries";
 import Alert from "../Alert/Alert";
@@ -18,6 +18,7 @@ const Header = ({ fetchWeather }: HeaderProps) => {
     const [query, setQuery] = useState("");
     const [suggestions, setSuggestions] = useState<GeoItem[]>([]);
     const [open, setOpen] = useState(false);
+    const [highlightedIndex, setHighlightedIndex] = useState<number>(-1);
     const skipFetchRef = useRef<boolean>(false);
     const timerRef = useRef<number | null>(null);
     const containerRef = useRef<HTMLDivElement | null>(null);
@@ -42,6 +43,7 @@ const Header = ({ fetchWeather }: HeaderProps) => {
 
     if (!query) {
       setSuggestions([]);
+      setHighlightedIndex(-1);
       setOpen(false);
       return;
     }
@@ -63,15 +65,18 @@ const Header = ({ fetchWeather }: HeaderProps) => {
             country: d.country
           }));
           setSuggestions(items);
+          setHighlightedIndex(-1);
           setOpen(items.length > 0);
         } else {
           setSuggestions([]);
+          setHighlightedIndex(-1);
           setOpen(false);
         }
       } catch (err: unknown) {
         console.error(err);
         setError("Failed to fetch location suggestions.");
         setSuggestions([]);
+        setHighlightedIndex(-1);
         setOpen(false);
       }
     }, 300);
@@ -89,6 +94,27 @@ const Header = ({ fetchWeather }: HeaderProps) => {
     setOpen(false);
   };
 
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      if (!suggestions.length) return;
+      setOpen(true);
+      setHighlightedIndex((prev) => (prev < suggestions.length - 1 ? prev + 1 : 0));
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      if (!suggestions.length) return;
+      setOpen(true);
+      setHighlightedIndex((prev) => (prev > 0 ? prev - 1 : suggestions.length - 1));
+    } else if (e.key === "Enter") {
+      e.preventDefault();
+      if (open && highlightedIndex >= 0 && suggestions[highlightedIndex]) {
+        handleSelect(suggestions[highlightedIndex]);
+      } else {
+        handleSearch();
+      }
+    }  
+  };
+
   const handleSearch = () => {
     if (!query) return;
     const parts = query.split(",").map(p => p.trim()).filter(Boolean);
@@ -97,7 +123,12 @@ const Header = ({ fetchWeather }: HeaderProps) => {
     if (parts.length > 1) {
       const last = parts[parts.length - 1];
       const matched = countries.find(c => c.name.toLowerCase() === last.toLowerCase() || c.code.toLowerCase() === last.toLowerCase());
-      if (matched) countryCode = matched.code;
+      if (matched) {
+        countryCode = matched.code;
+      } else {
+        const stateMatch = suggestions.find(s => s.state && s.state.toLowerCase() === last.toLowerCase());
+        if (stateMatch) countryCode = stateMatch.country;
+      }
     }
     fetchWeather({ city, country: countryCode });
     setOpen(false);
@@ -115,6 +146,7 @@ const Header = ({ fetchWeather }: HeaderProps) => {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               onFocus={() => { if (suggestions.length) setOpen(true); }}
+              onKeyDown={handleKeyDown}
             />
             <button
               className="absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-lg cursor-pointer"
@@ -133,7 +165,9 @@ const Header = ({ fetchWeather }: HeaderProps) => {
                 return (
                   <li
                     key={`${s.name}-${s.country}-${idx}`}
-                    className="px-3 py-2 hover:bg-slate-100 cursor-pointer text-xl text-primary"
+                    className={`px-3 py-2 cursor-pointer text-xl text-primary ${idx === highlightedIndex ? 'bg-slate-100' : 'hover:bg-slate-100'}`}
+                    onMouseEnter={() => setHighlightedIndex(idx)}
+                    onMouseLeave={() => setHighlightedIndex(-1)}
                     onClick={() => handleSelect(s)}
                   >
                     {label}
