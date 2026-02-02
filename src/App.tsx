@@ -40,7 +40,7 @@ const App = () => {
       <div className="flex-1 lg:px-8 px-2 space-y-6">
         <Header fetchWeather={fetchWeather} />
         <div className="mt-10">
-        {loading && <div className="flex justify-center items-center relative"><Spinner /></div>}
+        {loading && <div className="flex justify-center items-center relative mt-25"><Spinner /></div>}
         {!loading && hasWeatherData && <WeatherDetail weather={weather} hourlyWeather={hourlyWeather} uvIndex={uvIndex} />}
         {notFound && <Alert>City not found</Alert>}
         </div>
