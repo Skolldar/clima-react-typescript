@@ -2,7 +2,7 @@
 
 A modern, responsive weather application built with React, TypeScript, and TailwindCSS. Integrated with OpenWeatherMap API and Open-Meteo API for comprehensive weather data, featuring Valibot for type safe data validation.
 
-[![weaether-app.png](https://i.postimg.cc/SKsJTMqs/weaether-app.png)](https://postimg.cc/xXwfqqXD)
+[![Screenshot-from-2026-02-03-10-22-14.png](https://i.postimg.cc/FRxv99Jh/Screenshot-from-2026-02-03-10-22-14.png)](https://postimg.cc/ygWtjCPG)
 
 ## Features ✨
 
