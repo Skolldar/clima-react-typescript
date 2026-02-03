@@ -33,14 +33,14 @@ const App = () => {
 
   return (
     <>
-    <main className={`${isDarkMode ? 'dark-bg' : 'light-bg'} lg:p-10 py-4 flex min-h-screen`}>
+    <main className={`${isDarkMode ? 'dark-bg' : 'light-bg'} lg:p-10 py-4 flex h-screen`}>
       <div className="ml-2 md:ml-0">
         <Bar isDarkMode={isDarkMode} toggleTheme={toggleTheme} />
       </div>
       <div className="flex-1 lg:px-8 px-2 space-y-8 mt-2">
         <Header fetchWeather={fetchWeather} />
         <div className="mt-20">
-        {loading && <div className="flex justify-center items-center relative mt-25"><Spinner /></div>}
+        {loading && <div className="flex justify-center items-center relative"><Spinner /></div>}
         {!loading && hasWeatherData && <WeatherDetail weather={weather} hourlyWeather={hourlyWeather} uvIndex={uvIndex} />}
         {notFound && <Alert>City not found</Alert>}
         </div>
