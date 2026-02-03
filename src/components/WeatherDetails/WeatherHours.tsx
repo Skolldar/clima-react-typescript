@@ -8,10 +8,16 @@ type WeatherHoursProps = {
 }
 
 const WeatherHours = ({ hourlyWeather, tempUnit }: WeatherHoursProps) => {
-
-  const getWeatherIcon = (code: number) => {
-    if (code === 0) return '☀️'
-    if (code <= 3) return '🌤️'
+  const cloudNight = 'https://i.postimg.cc/D0Fhcvrs/night-cloud.png'
+  const getWeatherIcon = (code: number, isNight = false) => {
+    if (code === 0) return isNight ? '🌙' : '☀️'
+    if (code <= 3) {
+      return isNight ? (
+        <img src={cloudNight} alt="Night clouds" className="w-12 h-12" />
+      ) : (
+        '🌤️'
+      )
+    }
     if (code <= 48) return '🌫️'
     if (code <= 67) return '🌧️' 
     if (code <= 77) return '❄️' 
@@ -32,7 +38,11 @@ const WeatherHours = ({ hourlyWeather, tempUnit }: WeatherHoursProps) => {
                       hourlyWeather.map((hour, index) => {
                         const hourDate = new Date(hour.time)
                         const timeLabel = format(hourDate, 'ha').toLowerCase()
-                        const icon = getWeatherIcon(hour.weathercode)
+                        const isNight = (() => {
+                          const h = hourDate.getHours()
+                          return h < 6 || h >= 18
+                        })()
+                        const icon = getWeatherIcon(hour.weathercode, isNight)
                         const tempCelsius = hour.temperature_2m
                         const displayTemp = tempUnit === 'F' 
                           ? Math.round((tempCelsius * 9/5) + 32)
