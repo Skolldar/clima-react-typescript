@@ -30,10 +30,10 @@ const WeatherHours = ({ hourlyWeather, tempUnit }: WeatherHoursProps) => {
   return (
     <>
         <div className="blur-card">
-          <h2 className="font-semibold text-primary text-left pb-5">48-Hourly Forecast</h2>
+          <h2 className="font-semibold text-primary text-left lg:pb-8 pb-2">48-Hourly Forecast</h2>
             <div className=" bg-white/50 shadow-md py-4 rounded-xl">
                 <div className="overflow-x-auto">
-                  <div className="flex space-x-4 px-2 py-2 items-center">
+                  <div className="flex space-x-4 lg:p-8 items-center">
                     {hourlyWeather.length > 0 ? (
                       hourlyWeather.map((hour, index) => {
                         const hourDate = new Date(hour.time)
@@ -50,14 +50,14 @@ const WeatherHours = ({ hourlyWeather, tempUnit }: WeatherHoursProps) => {
 
                         return (
                           <div key={index} className="flex flex-col p-6 items-center justify-center space-y-10 rounded-lg">
-                            <div className="text-2xl text-primary">{timeLabel}</div>
-                            <div className="text-5xl">{icon}</div>
-                            <div className="font-semibold text-primary text-2xl">{displayTemp}&deg;{tempUnit}</div>
+                            <div className="lg:text-2xl text-xl text-primary">{timeLabel}</div>
+                            <div className="lg:text-5xl text-3xl">{icon}</div>
+                            <div className="font-semibold text-primary lg:text-2xl text-xl">{displayTemp}&deg;{tempUnit}</div>
                           </div>
                         )
                       })
                     ) : (
-                      <div className="col-span-full text-center text-primary py-10">
+                      <div className="col-span-full text-center text-primary py-10 lg:text-2xl text-xl">
                         No hourly forecast available
                       </div>
                     )}

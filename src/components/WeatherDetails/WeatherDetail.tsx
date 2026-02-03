@@ -53,7 +53,7 @@ export default function WeatherDetail({weather, hourlyWeather, uvIndex}: Weather
 
   return (
     <>
-    <div className="grid lg:grid-cols-2 lg:gap-10 gap-4 grid-cols-1 space-y-2 lg:space-y-8">
+    <div className="lg:mt-20 grid lg:grid-cols-2 lg:gap-15 gap-4 grid-cols-1">
         <div className="blur-card">
           <div className="grid grid-cols-2 items-center justify-between py-3">
             <div className="flex items-center justify-start gap-2">
@@ -83,10 +83,10 @@ export default function WeatherDetail({weather, hourlyWeather, uvIndex}: Weather
                   <p className={`py-8 ${styles.current}`}>{convertTemp(weather.main.temp)}&deg;{tempUnit}</p>
                     <div className="text-8xl mb-8 ml-8 md:hidden">{getWeatherIcon(weather.weather[0].description)}</div>
                 </div>
-                <span className="font-semibold md:hidden flex">Feels:<span className="ml-2 font-normal">{convertTemp(weather.main.feels_like)}&deg;{tempUnit}</span></span>
+                <span className="font-semibold md:hidden flex">Feels:<span className="ml-2 font-bold">{convertTemp(weather.main.feels_like)}&deg;{tempUnit}</span></span>
               <div className="flex text-primary gap-2 items-center justify-start mt-2">
-                  <span className="font-bold">Min: </span><span>{convertTemp(weather.main.temp_min)}&deg;{tempUnit}</span>
-                  <span className="font-bold">Max: </span><span>{convertTemp(weather.main.temp_max)}&deg;{tempUnit}</span>
+                  <span className="xs:text-xl font-semibold">Min: </span><span className="font-bold xs:text-lg">{convertTemp(weather.main.temp_min)}&deg;{tempUnit}</span>
+                  <span className="xs:text-xl font-semibold">Max: </span><span className="font-bold xs:text-lg">{convertTemp(weather.main.temp_max)}&deg;{tempUnit}</span>
                 </div>
               </div>
               <div className="flex flex-col items-end justify-end">
@@ -95,8 +95,9 @@ export default function WeatherDetail({weather, hourlyWeather, uvIndex}: Weather
                     getWeatherIcon(weather.weather[0].description)
                   }
                 </div>
-                  <p className=" gap-2 pt-4 md:pt-12 justify-start hidden md:justify-center items-center">
-                    <span>{convertTemp(weather.main.feels_like)}&deg;{tempUnit}</span>
+                  <p className=" gap-2 pt-4 lg:pt-12 hidden lg:flex lg:justify-center lg:items-center items-center">
+                    <span className="font-semibold mt-4 hidden lg:flex">Feels:</span>
+                    <span className="lg:font-bold lg:mt-4">{convertTemp(weather.main.feels_like)}&deg;{tempUnit}</span>
                   </p>
               </div>
             </div>
@@ -106,48 +107,48 @@ export default function WeatherDetail({weather, hourlyWeather, uvIndex}: Weather
         <div className="blur-card">
           <h2 className="text-left text-primary font-semibold pb-4">Today Highlight</h2>
           <div className="grid gap-6 text-primary sm:grid-cols-2">
-            <div className="bg-white/50 shadow-md p-8 rounded-xl flex flex-col items-center">
-                <h3 className="text-2xl">Wind</h3>
+            <div className="bg-white/50 shadow-md lg:p-8 py-4 rounded-xl flex flex-col items-center">
+                <h3 className="lg:text-2xl text-xl">Wind</h3>
               <div className="mb-4 flex items-center justify-center">
-                <img src="../wind.png" alt="Wind" className='w-29 h-29' />
+                <img src="../wind.png" alt="Wind" className='lg:w-29 lg:h-29 w-15 h-15' />
               </div>
               <div className="text-primary text-md font-normal">
-                <p className="text-2xl font-semibold">{convertWindToKmh(weather.wind.speed)} km/h</p>
+                <p className="lg:text-2xl text-xl font-semibold">{convertWindToKmh(weather.wind.speed)} km/h</p>
               </div>
             </div>
-            <div className="bg-white/50 shadow-md p-4 rounded-xl flex flex-col items-center"> 
-              <h3 className="text-2xl">UV Index</h3>
+            <div className="bg-white/50 shadow-md lg:p-8 py-4 rounded-xl flex flex-col items-center"> 
+              <h3 className="lg:text-2xl text-xl">UV Index</h3>
                   <div className="mt-3 flex flex-col items-center justify-center">
                   <div className="mb-2">
                     {uvCat === -1 ? (
-                      <img src="../uv-low.png" alt="UV unknown" className="w-30 h-30 mx-auto" />
+                      <img src="../uv-low.png" alt="UV unknown" className="lg:w-30 lg:h-30 w-15 h-15 mx-auto" />
                     ) : uvCat === 0 ? (
-                      <img src="../uv-low.png" alt="UV low" className="w-30 h-30 mx-auto" />
+                      <img src="../uv-low.png" alt="UV low" className="lg:w-30 lg:h-30 w-15 h-15 mx-auto" />
                     ) : uvCat === 1 ? (
-                      <img src="../uv-medium.png" alt="UV medium" className="w-30 h-30 mx-auto" />
+                      <img src="../uv-medium.png" alt="UV medium" className="lg:w-30 lg:h-30 w-15 h-15 mx-auto" />
                     ) : (
-                      <img src="../uv-high.png" alt="UV high" className="w-30 h-30 mx-auto" />
+                      <img src="../uv-high.png" alt="UV high" className="lg:w-30 lg:h-30 w-15 h-15 mx-auto" />
                     )}
                   </div>
-                    <div className=" mt-4 text-center text-primary text-2xl font-semibold">{uvIndex == null ? 'UV: —' : `UV: ${uvIndex}`}</div>
+                    <div className=" mt-4 text-center text-primary lg:text-2xl text-xl font-semibold">{uvIndex == null ? 'UV: —' : `UV: ${uvIndex}`}</div>
                   </div>
             </div>
-            <div className="bg-white/50 shadow-md p-4 rounded-xl flex flex-col items-center">
-            <h3 className="text-2xl">Humidity</h3>
+            <div className="bg-white/50 shadow-md lg:p-8 py-4 rounded-xl flex flex-col items-center">
+            <h3 className="lg:text-2xl text-xl">Humidity</h3>
               <div className="mb-4 flex items-center justify-center">
-                <img src="../humidity.png" alt="Humidity" className='w-29 h-29' />
+                <img src="../humidity.png" alt="Humidity" className='lg:w-29 lg:h-29 w-15 h-15' />
               </div>
               <div className="text-primary text-md font-normal">
-                <p className="text-2xl mt-1 font-semibold">{weather.main.humidity}%</p>
+                <p className="lg:text-2xl text-xl mt-1 font-semibold">{weather.main.humidity}%</p>
               </div>
             </div>
-            <div className="bg-white/50 shadow-md p-4 rounded-xl flex flex-col items-center">
-            <h3 className="text-2xl">Visibility</h3>
+            <div className="bg-white/50 shadow-md lg:p-8 py-4 rounded-xl flex flex-col items-center">
+            <h3 className="lg:text-2xl text-xl">Visibility</h3>
               <div className="mb-4 flex items-center justify-center">
-                <img src="../fog.png" alt="Visibility" className='w-29 h-29' />
+                <img src="../fog.png" alt="Visibility" className='lg:w-29 lg:h-29 w-15 h-15' />
               </div>
               <div className="text-primary text-md font-normal">
-                <p className="text-2xl font-semibold">{weather.visibility} m</p>
+                <p className="lg:text-2xl text-xl font-semibold">{weather.visibility} m</p>
               </div>
             </div>
           </div>
